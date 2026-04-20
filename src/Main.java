@@ -11,32 +11,34 @@ class ArrayStack
         this.top = -1;
     }
 
-    public void set(String element)
+    public boolean isFull()
     {
-        if (top == capacity - 1)
+        return top == capacity - 1;
+    }
+
+    public boolean isEmpty()
+    {
+        return top == -1;
+    }
+
+    public boolean add(String element)
+    {
+        if (isFull())
         {
-            System.out.println("Помилка: Стек переповнений!");
-        } else
-        {
-            stackArray[++top] = element;
+            System.out.println("Не вдалося додати '" + element + "': Стек переповнений!");
+            return false;
         }
+        stackArray[++top] = element;
+        return true;
     }
 
     public String delete()
     {
         if (isEmpty())
         {
-            System.out.println("Помилка: Стек порожній!");
-            return null;
-        } else
-        {
-            return stackArray[top--];
+            throw new IllegalStateException("Помилка: Спроба видалення з порожнього стека!");
         }
-    }
-
-    public boolean isEmpty()
-    {
-        return top == -1;
+        return stackArray[top--];
     }
 
     public void printStack()
@@ -59,26 +61,29 @@ public class Main
 {
     public static void main(String[] args)
     {
-        System.out.println("Створення екземпляра структури даних:");
+        System.out.println("Створення екземпляра структури даних: ");
         ArrayStack stack = new ArrayStack(5);
 
-        System.out.println("\nДодавання елементів:");
-        stack.set("10");
-        stack.set("25");
-        stack.set("42");
-        stack.set("99");
-        stack.set("108");
+        System.out.println("\nДодавання елементів: ");
+        stack.add("10");
+        System.out.println("Елемент '10' додано.");
+        stack.add("25");
+        System.out.println("Елемент '25' додано.");
+        stack.add("42");
+        System.out.println("Елемент '42' додано.");
 
         stack.printStack();
 
-        System.out.println("\nВидалення декількох елементів:");
-        String removed1 = stack.delete();
-        System.out.println("Видалено елемент: " + removed1);
+        System.out.println("\nВидалення декількох елементів: ");
+        try
+        {
+            System.out.println("Видалено елемент: " + stack.delete());
+            System.out.println("Видалено елемент: " + stack.delete());
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
 
-        String removed2 = stack.delete();
-        System.out.println("Видалено елемент: " + removed2);
-
-        System.out.println("\nВміст після видалення: ");
+        System.out.println("\nВміст після видалення:");
         stack.printStack();
     }
 }
